@@ -12,8 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('faskes', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('nama');
+            $table->string('alamat');
+            $table->string('telepon');
+            $table->string('wa');
+            $table->string('email');
+            $table->string('website')->nullable();
+            $table->enum('jenis', ['rumah_sakit', 'klinik', 'puskesmas']);
+            $table->boolean('bpjs')->default(false);
+            $table->boolean('available')->default(false);
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 11, 7);
             $table->timestamps();
+            $table->string('username')->unique();
+            $table->string('password');
         });
     }
 
