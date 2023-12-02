@@ -22,6 +22,7 @@ class FaskesResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+
     public static function form(Form $form): Form
     {
         return $form
@@ -128,7 +129,21 @@ class FaskesResource extends Resource
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('jenis')
+                    //if rumah_sakit display Rumah Sakit
+                    ->formatStateUsing(function (string $state) {
+                        if ($state == 'rumah_sakit') {
+                            return 'Rumah Sakit';
+                        } else {
+                            return ucfirst($state);
+                        }
+                    })
                     ->searchable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'rumah_sakit' => 'success',
+                        'klinik' => 'warning',
+                        'puskesmas' => 'success'
+                    })
                     ->sortable(),
                 TextColumn::make('wa')
                     ->searchable()
