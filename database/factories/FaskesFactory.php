@@ -11,10 +11,11 @@ class FaskesFactory extends Factory
 
     public function definition()
     {
-        $pulauJawaCoordinates = [
-            'latitude' => -7.6145,
-            'longitude' => 110.7126,
-        ];
+        // Rentang koordinat Jabodetabek, Sukabumi, dan Bandung
+        $minLat = -6.9820; // Batas Selatan Jabodetabek dan Sukabumi
+        $maxLat = -6.1918; // Batas Utara Sukabumi dan Bandung
+        $minLong = 106.4944; // Batas Barat Jabodetabek
+        $maxLong = 107.8221; // Batas Timur Bandung
 
         $jenis = $this->faker->randomElement(['rumah_sakit', 'klinik', 'puskesmas']);
         $capitalizedJenis = ucwords(str_replace('_', ' ', $jenis));
@@ -29,10 +30,16 @@ class FaskesFactory extends Factory
             'jenis' => $jenis,
             'bpjs' => $this->faker->boolean,
             'available' => $this->faker->boolean,
-            'latitude' => $pulauJawaCoordinates['latitude'] + mt_rand() / mt_getrandmax() * 2,
-            'longitude' => $pulauJawaCoordinates['longitude'] + mt_rand() / mt_getrandmax() * 2,
+            'latitude' => round($this->random_float($minLat, $maxLat), 6),
+            'longitude' => round($this->random_float($minLong, $maxLong), 6),
             'username' => $this->faker->userName,
             'password' => $this->faker->password,
         ];
+    }
+
+    // Fungsi untuk menghasilkan nilai float acak antara dua angka
+    private function random_float($min, $max)
+    {
+        return $min + mt_rand() / mt_getrandmax() * ($max - $min);
     }
 }

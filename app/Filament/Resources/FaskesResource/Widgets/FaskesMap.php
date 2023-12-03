@@ -123,8 +123,8 @@ class FaskesMap extends MapWidget
                         ->badge()
                         ->color(fn (string $state): string => match ($state) {
                             'rumah_sakit' => 'success',
-                            'klinik' => 'warning',
-                            'puskesmas' => 'success'
+                            'klinik' => 'info',
+                            'puskesmas' => 'danger'
                         }),
                     TextEntry::make('alamat')
                         ->label('Alamat')

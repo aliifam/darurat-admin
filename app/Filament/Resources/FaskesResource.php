@@ -144,8 +144,8 @@ class FaskesResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'rumah_sakit' => 'success',
-                        'klinik' => 'warning',
-                        'puskesmas' => 'success'
+                        'klinik' => 'info',
+                        'puskesmas' => 'danger'
                     })
                     ->sortable(),
                 TextColumn::make('wa')

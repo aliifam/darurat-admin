@@ -12,12 +12,12 @@ class ListFaskes extends ListRecords
     protected static string $resource = FaskesResource::class;
 
     //header widget
-    // protected function getHeaderWidgets(): array
-    // {
-    //     return [
-    //         FaskesMap::make(),
-    //     ];
-    // }
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            FaskesMap::make(),
+        ];
+    }
 
     protected function getHeaderActions(): array
     {
