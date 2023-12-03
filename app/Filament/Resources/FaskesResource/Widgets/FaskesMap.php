@@ -72,7 +72,12 @@ class FaskesMap extends MapWidget
                  * If you don't provide icons, the map will use the standard Google marker pin.
                  */
                 'icon' => [
-                    'url' => url('images/location.png'),
+                    // 'url' => url('images/location.png'),
+                    'url' => match ($location->jenis) {
+                        'rumah_sakit' => url('images/rs.png'),
+                        'klinik' => url('images/klinik.png'),
+                        'puskesmas' => url('images/puskesmas.png'),
+                    },
                     'type' => 'svg',
                     'scale' => [35, 35],
                 ],
