@@ -4,6 +4,10 @@ namespace App\Filament\Resources\FaskesResource\Widgets;
 
 use App\Models\Faskes;
 use Cheesegrits\FilamentGoogleMaps\Widgets\MapWidget;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 
 class FaskesMap extends MapWidget
 {
@@ -11,6 +15,7 @@ class FaskesMap extends MapWidget
 
     protected int | string | array $columnSpan = '2';
 
+    protected static ?string $markerAction = 'markerAction';
 
     protected static ?int $sort = 1;
 
@@ -49,14 +54,15 @@ class FaskesMap extends MapWidget
                     'lng' => $location->longitude ? round(floatval($location->longitude), static::$precision) : 0,
                 ],
 
-                'label' => view(
-                    'widgets.label',
-                    [
-                        'label' => $location->nama,
-                        'url' => route('filament.admin.resources.faskes.edit', $location->id),
-                        'type' => $location->jenis,
-                    ]
-                )->render(),
+                // 'label' => view(
+                //     'widgets.label',
+                //     [
+                //         'label' => $location->nama,
+                //         'url' => route('filament.admin.resources.faskes.edit', $location->id),
+                //         'type' => $location->jenis,
+                //     ]
+                // )->render(),
+                'label' => $location->nama,
 
                 'id' => $location->getKey(),
 
@@ -97,21 +103,71 @@ class FaskesMap extends MapWidget
     public function markerAction(): Action
     {
         return Action::make('markerAction')
-            ->label('Details')
+            ->label('Detail Fasilitas Kesehatan')
             ->infolist([
                 Section::make([
-                    TextEntry::make('name'),
-                    TextEntry::make('street'),
-                    TextEntry::make('city'),
-                    TextEntry::make('state'),
-                    TextEntry::make('zip'),
-                    TextEntry::make('formatted_address'),
+                    TextEntry::make('nama'),
+                    TextEntry::make('jenis')
+                        ->formatStateUsing(function (string $state) {
+                            if ($state == 'rumah_sakit') {
+                                return 'Rumah Sakit';
+                            } else {
+                                return ucfirst($state);
+                            }
+                        })
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state) {
+                            'rumah_sakit' => 'success',
+                            'klinik' => 'warning',
+                            'puskesmas' => 'success'
+                        }),
+                    TextEntry::make('alamat')
+                        ->label('Alamat')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('wa')
+                        ->label('Whatsapp')
+                        ->formatStateUsing(function (string $state) {
+                            // make link to whatsapp from wa number
+                            $state = '<a href="https://wa.me/' . $state . '" target="_blank">' . $state . '</a>';
+                            return $state;
+                        })
+                        ->html(),
+                    TextEntry::make('telepon')
+                        ->label('Telepon')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('email')
+                        ->label('Email')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('latitude')
+                        ->label('Latitude')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('longitude')
+                        ->label('Longitude')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
                 ])
-                    ->columns(3)
+                    ->columns(2)
             ])
             ->record(function (array $arguments) {
                 return array_key_exists('model_id', $arguments) ? Faskes::find($arguments['model_id']) : null;
             })
+            //modal edit button
+            ->modalFooterActions(
+                [
+                    Action::make('edit')
+                        ->label('Edit Faskes')
+                        ->url(fn (Faskes $faskes) => route('filament.admin.resources.faskes.edit', $faskes->id))
+                ]
+            )
             ->modalSubmitAction(false);
     }
 }

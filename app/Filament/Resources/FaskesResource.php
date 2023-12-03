@@ -108,7 +108,7 @@ class FaskesResource extends Resource
                     ->required(),
                 TextInput::make('username')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->label(__('Username'))
                     ->placeholder(__('Username')),
                 TextInput::make('password')
