@@ -2,29 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FaskesResource\Pages;
-use App\Models\Faskes;
+use App\Filament\Resources\AmbulanResource\Pages;
+use App\Filament\Resources\AmbulanResource\RelationManagers;
+use App\Models\Ambulan;
 use ArberMustafa\FilamentLocationPickrField\Forms\Components\LocationPickr;
-use Filament\Actions\ViewAction;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class FaskesResource extends Resource
+class AmbulanResource extends Resource
 {
-    protected static ?string $model = Faskes::class;
+    protected static ?string $model = Ambulan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static ?string $navigationIcon = 'heroicon-o-speaker-wave';
 
-    protected static ?string $navigationLabel = 'Data Faskes';
-    protected static ?string $pluralModelLabel = 'Data Fasilitas Kesehatan';
-
+    protected static ?string $navigationLabel = 'Data Ambulan';
+    protected static ?string $pluralModelLabel = 'Data Ambulan';
 
     public static function form(Form $form): Form
     {
@@ -32,12 +33,8 @@ class FaskesResource extends Resource
             ->schema([
                 TextInput::make('nama')
                     ->required()
-                    ->label(__('Nama Faskes'))
-                    ->placeholder(__('Nama Faskes')),
-                Textarea::make('alamat')
-                    ->required()
-                    ->label(__('Alamat'))
-                    ->placeholder(__('Alamat')),
+                    ->label(__('Nama Ambulan'))
+                    ->placeholder(__('Nama Ambulan')),
                 TextInput::make('telepon')
                     ->required()
                     ->label(__('Telepon'))
@@ -46,23 +43,6 @@ class FaskesResource extends Resource
                     ->required()
                     ->label(__('Whatsapp'))
                     ->placeholder(__('Whatsapp')),
-                TextInput::make('email')
-                    ->required()
-                    ->type('email')
-                    ->label(__('Email'))
-                    ->placeholder(__('Email')),
-                TextInput::make('website')
-                    ->label(__('Website'))
-                    ->placeholder(__('Website')),
-                Select::make('jenis')
-                    ->required()
-                    ->searchable()
-                    ->options([
-                        'rumah_sakit' => __('Rumah Sakit'),
-                        'klinik' => __('Klinik'),
-                        'puskesmas' => __('Puskesmas'),
-                    ])
-                    ->label(__('Jenis Faskes')),
                 LocationPickr::make('location')
                     ->mapControls([
                         'mapTypeControl'    => true,
@@ -101,8 +81,8 @@ class FaskesResource extends Resource
                         ]);
                     })
                     ->lazy(),
-                Toggle::make('bpjs')
-                    ->label(__('Menerima BPJS'))
+                Toggle::make('free')
+                    ->label(__('Layanan Gratis'))
                     ->inline(false)
                     ->required(),
                 Toggle::make('available')
@@ -128,25 +108,9 @@ class FaskesResource extends Resource
                 TextColumn::make('nama')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('alamat')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('jenis')
-                    //if rumah_sakit display Rumah Sakit
-                    ->formatStateUsing(function (string $state) {
-                        if ($state == 'rumah_sakit') {
-                            return 'Rumah Sakit';
-                        } else {
-                            return ucfirst($state);
-                        }
-                    })
-                    ->searchable()
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'rumah_sakit' => 'success',
-                        'klinik' => 'warning',
-                        'puskesmas' => 'success'
-                    })
+                ToggleColumn::make('free')
+                    ->label(__('Layanan Gratis'))
+                    ->inline(false)
                     ->sortable(),
                 TextColumn::make('wa')
                     ->searchable()
@@ -182,9 +146,9 @@ class FaskesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFaskes::route('/'),
-            'create' => Pages\CreateFaskes::route('/create'),
-            'edit' => Pages\EditFaskes::route('/{record}/edit'),
+            'index' => Pages\ListAmbulans::route('/'),
+            'create' => Pages\CreateAmbulan::route('/create'),
+            'edit' => Pages\EditAmbulan::route('/{record}/edit'),
         ];
     }
 }
