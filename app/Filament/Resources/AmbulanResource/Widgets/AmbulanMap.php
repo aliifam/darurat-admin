@@ -2,13 +2,18 @@
 
 namespace App\Filament\Resources\AmbulanResource\Widgets;
 
+use App\Models\Ambulan;
 use Cheesegrits\FilamentGoogleMaps\Widgets\MapWidget;
+use Filament\Actions\Action;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 
 class AmbulanMap extends MapWidget
 {
     protected static ?string $heading = 'Peta Persebaran Ambulan';
 
     protected int | string | array $columnSpan = '2';
+    protected static ?string $markerAction = 'markerAction';
 
     protected static ?int $sort = 1;
 
@@ -64,5 +69,77 @@ class AmbulanMap extends MapWidget
         }
 
         return $data;
+    }
+
+    public function getConfig(): array
+    {
+        $config = parent::getConfig();
+
+        // Disable points of interest
+        $config['mapConfig']['styles'] = [
+            [
+                'featureType' => 'poi',
+                'elementType' => 'labels',
+                'stylers'     => [
+                    ['visibility' => 'off'],
+                ],
+            ],
+        ];
+
+        return $config;
+    }
+
+    public function markerAction(): Action
+    {
+        return Action::make('markerAction')
+            ->label('Detail Fasilitas Kesehatan')
+            ->infolist([
+                Section::make([
+                    TextEntry::make('nama'),
+                    TextEntry::make('free')
+                        ->label(__('Layanan Gratis'))
+                        ->formatStateUsing(function (bool $state) {
+                            return $state ? 'Ya' : 'Tidak';
+                        })
+                        ->badge()
+                        ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
+                    TextEntry::make('wa')
+                        ->label('Whatsapp')
+                        ->formatStateUsing(function (string $state) {
+                            // make link to whatsapp from wa number
+                            $state = '<a href="https://wa.me/' . $state . '" target="_blank">' . $state . '</a>';
+                            return $state;
+                        })
+                        ->html(),
+                    TextEntry::make('telepon')
+                        ->label('Telepon')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('latitude')
+                        ->label('Latitude')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('longitude')
+                        ->label('Longitude')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                ])
+                    ->columns(2)
+            ])
+            ->record(function (array $arguments) {
+                return array_key_exists('model_id', $arguments) ? Ambulan::find($arguments['model_id']) : null;
+            })
+            //modal edit button
+            ->modalFooterActions(
+                [
+                    Action::make('edit')
+                        ->label('Edit Faskes')
+                        ->url(fn (Ambulan $ambulan) => route('filament.admin.resources.ambulans.edit', $ambulan->id))
+                ]
+            )
+            ->modalSubmitAction(false);
     }
 }
