@@ -2,13 +2,18 @@
 
 namespace App\Filament\Resources\PemadamResource\Widgets;
 
+use App\Models\Pemadam;
 use Cheesegrits\FilamentGoogleMaps\Widgets\MapWidget;
+use Filament\Actions\Action;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 
 class PemadamMap extends MapWidget
 {
     protected static ?string $heading = 'Peta Pemadam Kebakaran';
 
     protected int | string | array $columnSpan = '2';
+    protected static ?string $markerAction = 'markerAction';
 
     protected static ?int $sort = 1;
 
@@ -63,5 +68,87 @@ class PemadamMap extends MapWidget
         }
 
         return $data;
+    }
+
+    public function getConfig(): array
+    {
+        $config = parent::getConfig();
+
+        // Disable points of interest
+        $config['mapConfig']['styles'] = [
+            [
+                'featureType' => 'poi',
+                'elementType' => 'labels',
+                'stylers'     => [
+                    ['visibility' => 'off'],
+                ],
+            ],
+        ];
+
+        return $config;
+    }
+
+    public function markerAction(): Action
+    {
+        return Action::make('markerAction')
+            ->label('Detail Fasilitas Kesehatan')
+            ->infolist([
+                Section::make([
+                    TextEntry::make('nama'),
+                    TextEntry::make('alamat')
+                        ->label('Alamat')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('wa')
+                        ->label('Whatsapp')
+                        ->formatStateUsing(function (string $state) {
+                            // make link to whatsapp from wa number
+                            $state = '<a href="https://wa.me/' . $state . '" target="_blank">' . $state . '</a>';
+                            return $state;
+                        })
+                        ->html(),
+                    TextEntry::make('telepon')
+                        ->label('Telepon')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('email')
+                        ->label('Email')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('available')
+                        ->label(__('Layanan Tersedia'))
+                        ->formatStateUsing(function (bool $state) {
+                            return $state ? 'Ya' : 'Tidak';
+                        })
+                        ->badge()
+                        ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
+                    TextEntry::make('latitude')
+                        ->label('Latitude')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                    TextEntry::make('longitude')
+                        ->label('Longitude')
+                        ->copyable()
+                        ->copyMessage('Copied!')
+                        ->copyMessageDuration(1500),
+                ])
+                    ->columns(2)
+            ])
+            ->record(function (array $arguments) {
+                return array_key_exists('model_id', $arguments) ? Pemadam::find($arguments['model_id']) : null;
+            })
+            //modal edit button
+            ->modalFooterActions(
+                [
+                    Action::make('edit')
+                        ->label('Edit Faskes')
+                        ->url(fn (Pemadam $pemadam) => route('filament.admin.resources.pemadams.edit', $pemadam->id))
+                ]
+            )
+            ->modalSubmitAction(false);
     }
 }
