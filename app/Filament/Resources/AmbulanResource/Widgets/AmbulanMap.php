@@ -92,7 +92,7 @@ class AmbulanMap extends MapWidget
     public function markerAction(): Action
     {
         return Action::make('markerAction')
-            ->label('Detail Fasilitas Kesehatan')
+            ->label('Detail Ambulan')
             ->infolist([
                 Section::make([
                     TextEntry::make('nama'),

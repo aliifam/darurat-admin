@@ -91,7 +91,7 @@ class PemadamMap extends MapWidget
     public function markerAction(): Action
     {
         return Action::make('markerAction')
-            ->label('Detail Fasilitas Kesehatan')
+            ->label('Detail Pemadam Kebakaran')
             ->infolist([
                 Section::make([
                     TextEntry::make('nama'),
