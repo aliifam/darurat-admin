@@ -6,7 +6,7 @@ use Cheesegrits\FilamentGoogleMaps\Widgets\MapWidget;
 
 class PemadamMap extends MapWidget
 {
-    protected static ?string $heading = 'Map';
+    protected static ?string $heading = 'Peta Pemadam Kebakaran';
 
     protected int | string | array $columnSpan = '2';
 
