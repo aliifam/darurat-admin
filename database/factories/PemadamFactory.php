@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Ambulan;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Pemadam;
 
-class AmbulanFactory extends Factory
+class PemadamFactory extends Factory
 {
-    protected $model = Ambulan::class;
+    protected $model = Pemadam::class;
 
     public function definition()
     {
@@ -17,11 +17,14 @@ class AmbulanFactory extends Factory
         $minLong = 106.4944; // Batas Barat Jabodetabek
         $maxLong = 107.8221; // Batas Timur Bandung
 
+
         return [
-            'nama' => 'Ambulan ' . $this->faker->company,
+            'nama' => 'Pemadam Kebakaran ' . $this->faker->company,
+            'alamat' => $this->faker->address,
             'telepon' => '628' . $this->faker->unique()->numerify('##########'),
             'wa' => '628' . $this->faker->unique()->numerify('##########'),
-            'free' => $this->faker->boolean,
+            'email' => $this->faker->email,
+            'website' => $this->faker->url,
             'available' => $this->faker->boolean,
             'latitude' => round($this->random_float($minLat, $maxLat), 6),
             'longitude' => round($this->random_float($minLong, $maxLong), 6),

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Ambulan;
+use App\Models\Polisi;
 use Illuminate\Database\Seeder;
 
-class AmbulanSeeder extends Seeder
+class PolisiSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class AmbulanSeeder extends Seeder
     public function run()
     {
         // Generate 1000 faskes records for Pulau Jawa
-        Ambulan::factory()->count(100)->create();
+        Polisi::factory()->count(100)->create();
     }
 }
