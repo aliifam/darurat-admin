@@ -108,11 +108,15 @@ class AmbulanResource extends Resource
                 TextColumn::make('nama')
                     ->searchable()
                     ->sortable(),
-                ToggleColumn::make('free')
+                TextColumn::make('free')
                     ->label(__('Layanan Gratis'))
-                    ->inline(false)
-                    ->sortable(),
+                    ->formatStateUsing(function (bool $state) {
+                        return $state ? 'Ya' : 'Tidak';
+                    })
+                    ->badge()
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
                 TextColumn::make('wa')
+                    ->label(__('Whatsapp'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('latitude')

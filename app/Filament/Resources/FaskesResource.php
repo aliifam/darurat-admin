@@ -149,6 +149,7 @@ class FaskesResource extends Resource
                     })
                     ->sortable(),
                 TextColumn::make('wa')
+                    ->label(__('Whatsapp'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('latitude')
