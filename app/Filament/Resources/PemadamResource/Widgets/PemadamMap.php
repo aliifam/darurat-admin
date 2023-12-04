@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\AmbulanResource\Widgets;
+namespace App\Filament\Resources\PemadamResource\Widgets;
 
 use Cheesegrits\FilamentGoogleMaps\Widgets\MapWidget;
 
-class AmbulanMap extends MapWidget
+class PemadamMap extends MapWidget
 {
     protected static ?string $heading = 'Map';
 
@@ -26,8 +26,7 @@ class AmbulanMap extends MapWidget
          * You can use whatever query you want here, as long as it produces a set of records with your
          * lat and lng fields in them.
          */
-        // $locations = \App\Models\Ambulan::all()->limit(500);
-        $locations = \App\Models\Ambulan::all();
+        $locations = \App\Models\Pemadam::all();
 
         $data = [];
 
@@ -56,7 +55,7 @@ class AmbulanMap extends MapWidget
                  * If you don't provide icons, the map will use the standard Google marker pin.
                  */
                 'icon' => [
-                    'url' => url('images/ambulan.png'),
+                    'url' => url('images/pemadam.png'),
                     'type' => 'svg',
                     'scale' => [35, 35],
                 ],
