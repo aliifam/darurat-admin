@@ -15,6 +15,6 @@ class PemadamSeeder extends Seeder
     public function run()
     {
         // Generate 1000 faskes records for Pulau Jawa
-        Pemadam::factory()->count(100)->create();
+        Pemadam::factory()->count(50)->create();
     }
 }

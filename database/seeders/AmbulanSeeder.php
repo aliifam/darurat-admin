@@ -15,6 +15,6 @@ class AmbulanSeeder extends Seeder
     public function run()
     {
         // Generate 1000 faskes records for Pulau Jawa
-        Ambulan::factory()->count(100)->create();
+        Ambulan::factory()->count(50)->create();
     }
 }

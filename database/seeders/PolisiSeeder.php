@@ -15,6 +15,6 @@ class PolisiSeeder extends Seeder
     public function run()
     {
         // Generate 1000 faskes records for Pulau Jawa
-        Polisi::factory()->count(100)->create();
+        Polisi::factory()->count(50)->create();
     }
 }

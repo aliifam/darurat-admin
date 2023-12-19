@@ -17,6 +17,12 @@ class FaskesFactory extends Factory
         $minLong = 106.4944; // Batas Barat Jabodetabek
         $maxLong = 107.8221; // Batas Timur Bandung
 
+        //rentang koordinat Kota Bandung dan kabupaten bandung
+        $minLatBandung = -7.3128; // Batas Selatan Kota dan Kabupaten Bandung
+        $maxLatBandung = -6.8283; // Batas Utara Kota dan Kabupaten Bandung
+        $minLongBandung = 107.2984; // Batas Barat Kota dan Kabupaten Bandung
+        $maxLongBandung = 107.934572; // Batas Timur Kota dan Kabupaten Bandung
+
         $jenis = $this->faker->randomElement(['rumah_sakit', 'klinik', 'puskesmas']);
         $capitalizedJenis = ucwords(str_replace('_', ' ', $jenis));
 
@@ -30,8 +36,8 @@ class FaskesFactory extends Factory
             'jenis' => $jenis,
             'bpjs' => $this->faker->boolean,
             'available' => $this->faker->boolean,
-            'latitude' => round($this->random_float($minLat, $maxLat), 6),
-            'longitude' => round($this->random_float($minLong, $maxLong), 6),
+            'latitude' => round($this->random_float($minLatBandung, $maxLatBandung), 6),
+            'longitude' => round($this->random_float($minLongBandung, $maxLongBandung), 6),
             'username' => $this->faker->userName,
             'password' => $this->faker->password,
         ];

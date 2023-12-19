@@ -136,7 +136,7 @@ class AmbulanMap extends MapWidget
             ->modalFooterActions(
                 [
                     Action::make('edit')
-                        ->label('Edit Faskes')
+                        ->label('Edit Ambulan')
                         ->url(fn (Ambulan $ambulan) => route('filament.admin.resources.ambulans.edit', $ambulan->id))
                 ]
             )

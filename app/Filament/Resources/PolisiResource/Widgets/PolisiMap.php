@@ -145,7 +145,7 @@ class PolisiMap extends MapWidget
             ->modalFooterActions(
                 [
                     Action::make('edit')
-                        ->label('Edit Faskes')
+                        ->label('Edit Kantor Polisi')
                         ->url(fn (Polisi $polisi) => route('filament.admin.resources.polisis.edit', $polisi->id))
                 ]
             )

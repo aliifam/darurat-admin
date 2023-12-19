@@ -145,7 +145,7 @@ class PemadamMap extends MapWidget
             ->modalFooterActions(
                 [
                     Action::make('edit')
-                        ->label('Edit Faskes')
+                        ->label('Edit Pemadam Kebakaran')
                         ->url(fn (Pemadam $pemadam) => route('filament.admin.resources.pemadams.edit', $pemadam->id))
                 ]
             )

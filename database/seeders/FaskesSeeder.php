@@ -15,6 +15,6 @@ class FaskesSeeder extends Seeder
     public function run()
     {
         // Generate 1000 faskes records for Pulau Jawa
-        Faskes::factory()->count(100)->create();
+        Faskes::factory()->count(50)->create();
     }
 }
